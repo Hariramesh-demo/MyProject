@@ -31,7 +31,7 @@ jobs:
       # 5️⃣ Pack the UiPath project
       - name: Pack project
         run: |
-          uipcli package pack Git_Deploy\project.json --output ./output
+          uipcli package pack myproject\Git_Deploy\project.json --output ./output
 
       # 6️⃣ Deploy to Orchestrator
       - name: Deploy package to Orchestrator
