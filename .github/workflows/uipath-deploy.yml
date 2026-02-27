@@ -41,6 +41,7 @@ jobs:
         run: |
           uipcli package deploy ./output/*.nupkg `
             --organizationUrl https://cloud.uipath.com/naraymabkmpa `
+            --accountName naraymabkmpa `
             --tenant DefaultTenant `
             --token ${{ secrets.UIPATH_TOKEN }} `
             --folder GIT_Testing `
