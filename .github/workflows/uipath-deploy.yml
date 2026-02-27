@@ -39,7 +39,7 @@ jobs:
       # 7️⃣ Deploy package
       - name: Deploy to Orchestrator
         run: >
-          uipcli package deploy ./output/*.nupkg
+          uipcli orchestrator deploy ./output/*.nupkg
           --organizationUrl https://cloud.uipath.com/naraymabkmpa
           --tenant DefaultTenant
           --token rt_E3AFF8D41BA97A101EECF7776430AAD9D144ED8F6B2B81C250D8B554889B4CC4-1
