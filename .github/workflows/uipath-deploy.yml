@@ -1,20 +1,19 @@
-name: UiPath CI/CD Deployment
+name: UiPath Manual Deployment
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: windows-latest
 
     steps:
-      # 1️⃣ Checkout Code
+
+      # 1️⃣ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Install .NET (Required for CLI)
+      # 2️⃣ Install .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -28,18 +27,21 @@ jobs:
       - name: Add CLI to PATH
         run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
-      # 5️⃣ Pack the UiPath project
-      - name: Pack project
+      # 5️⃣ Debug - show files (optional but recommended first time)
+      - name: Show directory structure
+        run: dir -Recurse
+
+      # 6️⃣ Pack project
+      - name: Pack UiPath Project
         run: |
           uipcli package pack myproject\Git_Deploy\project.json --output ./output
 
-      # 6️⃣ Deploy to Orchestrator
-      - name: Deploy package to Orchestrator
+      # 7️⃣ Deploy package
+      - name: Deploy to Orchestrator
         run: |
           uipcli package deploy ./output/*.nupkg `
-            --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
-            --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
-            --clientId ${{ secrets.UIPATH_CLIENT_ID }} `
-            --clientSecret ${{ secrets.UIPATH_CLIENT_SECRET }} `
+            --organizationUrl https://cloud.uipath.com/${{ secrets.UIPATH_ACCOUNT_NAME }} `
+            --tenant ${{ secrets.UIPATH_TENANT_NAME }} `
+            --token ${{ secrets.UIPATH_TOKEN }} `
             --folder ${{ secrets.UIPATH_FOLDER_NAME }} `
             --createProcess true
