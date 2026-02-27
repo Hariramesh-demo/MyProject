@@ -37,12 +37,11 @@ jobs:
           uipcli package pack myproject\Git_Deploy\project.json --output ./output
 
       # 7️⃣ Deploy package
-      - name: Deploy to Orchestrator
-        run: >
-          uipcli package deploy ./output/*.nupkg
-          --orchestrator_url https://cloud.uipath.com/naraymabkmpa
-          --organizationName naraymabkmpa
-          --TenantName DefaultTenan
-          --token rt_E3AFF8D41BA97A101EECF7776430AAD9D144ED8F6B2B81C250D8B554889B4CC4-1
-          --FolderName GIT_Testing
-          --createProcess
+         run: >
+          uipcli package deploy "./output/*.nupkg"
+          "https://cloud.uipath.com/naraymabkmpa/DefaultTenant"
+          DefaultTenant
+          -t ${{ secrets.UIPATH_TOKEN }}
+          -a naraymabkmpa
+          -o GIT_Testing
+          -c
