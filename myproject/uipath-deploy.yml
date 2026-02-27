@@ -1,0 +1,45 @@
+name: UiPath CI/CD Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      # 1️⃣ Checkout Code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Install .NET (Required for CLI)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x'
+
+      # 3️⃣ Install UiPath CLI
+      - name: Install UiPath CLI
+        run: dotnet tool install --global UiPath.CLI.Windows
+
+      # 4️⃣ Add CLI to PATH
+      - name: Add CLI to PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      # 5️⃣ Pack the UiPath project
+      - name: Pack project
+        run: |
+          uipcli package pack project.json --output ./output
+
+      # 6️⃣ Deploy to Orchestrator
+      - name: Deploy package to Orchestrator
+        run: |
+          uipcli package deploy ./output/*.nupkg `
+            --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
+            --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
+            --clientId ${{ secrets.UIPATH_CLIENT_ID }} `
+            --clientSecret ${{ secrets.UIPATH_CLIENT_SECRET }} `
+            --folder ${{ secrets.UIPATH_FOLDER_NAME }} `
+            --createProcess true
