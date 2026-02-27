@@ -40,8 +40,8 @@ jobs:
       - name: Deploy to Orchestrator
         run: |
           uipcli package deploy ./output/*.nupkg `
-            --organizationUrl https://cloud.uipath.com/naraymabkmpa
-            --tenant DefaultTenant
+            --organizationUrl https://cloud.uipath.com/naraymabkmpa `
+            --tenant DefaultTenant `
             --token ${{ secrets.UIPATH_TOKEN }} `
-            --folder GIT_Testing
+            --folder GIT_Testing `
             --createProcess true
