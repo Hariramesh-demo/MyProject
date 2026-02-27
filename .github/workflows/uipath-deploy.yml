@@ -38,10 +38,11 @@ jobs:
 
       # 7️⃣ Deploy package
       - name: Deploy to Orchestrator
-        run: |
-          uipcli package deploy ./output/*.nupkg `
-            --tenantName DefaultTenant ` 
-            --accountName naraymabkmpa `
-            --token ${{ secrets.UIPATH_TOKEN }} `
-            --folder GIT_Testing `
-            --createProcess true
+        run: >
+              uipcli package deploy ./output/*.nupkg
+              --accountName naraymabkmpa
+              --tenantName DefaultTenant
+              --clientId 3d8e6e97-5ac3-40ab-9423-2f50760519f8
+              --clientSecret 3u7k2E~yEEe!2qhjHDRhfLr@E9ef2!2YXm!4V!8XxLeMfc5$#IKvgU$2A90ivx3f
+              --folder GIT_Testing
+              --createProcess
