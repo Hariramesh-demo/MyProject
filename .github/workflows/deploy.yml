@@ -39,8 +39,8 @@ jobs:
       # ✅ Deploy
       - name: Deploy
         run: |
-          uipcli package deploy --path ./output `
-            --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
-            --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
-            --token ${{ secrets.UIPATH_PAT }} `
-            --folder ${{ secrets.UIPATH_FOLDER_NAME }}
+          uipcli package deploy --path ./output https://cloud.uipath.com ${{ secrets.UIPATH_TENANT_NAME }} `
+           -t ${{ secrets.UIPATH_PAT }} `
+           -a ${{ secrets.UIPATH_ACCOUNT_NAME }} `
+           -o ${{ secrets.UIPATH_FOLDER_NAME }} `
+            --entryPointsPath "Main.xaml"
