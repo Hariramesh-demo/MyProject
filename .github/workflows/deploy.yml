@@ -1,0 +1,49 @@
+name: UiPath Deploy Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      # 1. Get code
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 2. Install .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      # 3. Install UiPath CLI
+      - name: Install UiPath CLI
+        run: |
+          dotnet tool install -g UiPath.CLI
+
+      # 4. Add CLI to PATH
+      - name: Add CLI to PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+      # 5. Restore dependencies
+      - name: Restore
+        run: uipath restore .
+
+      # 6. Pack project
+      - name: Pack
+        run: |
+          uipath pack . --output ./output --version 1.0.${{ github.run_number }}
+
+      # 7. Deploy to Orchestrator
+      - name: Deploy
+        run: |
+          uipath deploy ./output `
+            --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
+            --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
+            --token ${{ secrets.UIPATH_PAT }} `
+            --folder ${{ secrets.UIPATH_FOLDER_NAME }}
