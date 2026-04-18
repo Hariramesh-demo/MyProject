@@ -39,7 +39,7 @@ jobs:
       # ✅ Deploy
       - name: Deploy
         run: |
-          uipcli package deploy --path ./output https://cloud.uipath.com/naraymabkmpa ${{ secrets.UIPATH_TENANT_NAME }} `
+          uipcli package deploy --path ./output https://cloud.uipath.com ${{ secrets.UIPATH_TENANT_NAME }} `
            -t ${{ secrets.UIPATH_PAT }} `
            -a ${{ secrets.UIPATH_ACCOUNT_NAME }} `
            -o ${{ secrets.UIPATH_FOLDER_NAME }} `
