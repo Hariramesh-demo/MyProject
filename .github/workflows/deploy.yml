@@ -34,7 +34,7 @@ jobs:
       # ✅ Pack
       - name: Pack
         run: |
-          uipcli package pack --path . --output ./output --version 1.0.${{ github.run_number }}
+          uipcli package pack ./myproject/Git_Deploy . --output ./output --version 1.0.${{ github.run_number }}
 
       # ✅ Deploy
       - name: Deploy
