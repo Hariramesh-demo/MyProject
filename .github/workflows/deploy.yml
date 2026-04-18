@@ -11,41 +11,20 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # 1. Checkout
       - name: Checkout
         uses: actions/checkout@v3
 
-      # 2. Setup .NET
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+      - name: UiPath Pack
+        uses: UiPath/pack@v2
         with:
-          dotnet-version: '6.0.x'
+          versionType: "AutoVersion"
+          outputFolder: "output"
 
-      # 3. Install CLI
-      - name: Install UiPath CLI
-        run: |
-          dotnet tool install --global UiPath.CLI.Windows
-
-      # 4. Add to PATH
-      - name: Add CLI to PATH
-        run: |
-          echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
-
-      # 5. Verify CLI
-      - name: Verify CLI
-        run: |
-          uipcli --version
-
-      # 6. Pack project
-      - name: Pack
-        run: |
-          uipcli pack . --output ./output --version 1.0.${{ github.run_number }}
-
-      # 7. Deploy
-      - name: Deploy
-        run: |
-          uipcli deploy ./output `
-            --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
-            --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
-            --token ${{ secrets.UIPATH_PAT }} `
-            --folder ${{ secrets.UIPATH_FOLDER_NAME }}
+      - name: UiPath Deploy
+        uses: UiPath/deploy@v2
+        with:
+          orchestratorUrl: https://cloud.uipath.com
+          tenantName: ${{ secrets.UIPATH_TENANT_NAME }}
+          folderName: ${{ secrets.UIPATH_FOLDER_NAME }}
+          packagePath: "output"
+          token: ${{ secrets.UIPATH_PAT }}
