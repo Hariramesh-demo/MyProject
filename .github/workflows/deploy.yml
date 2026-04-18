@@ -28,21 +28,28 @@ jobs:
 
       # 4. Add CLI to PATH
       - name: Add CLI to PATH
-        run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+        run: |
+          echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
-      # 5. Restore dependencies
+      # 5. Verify CLI (IMPORTANT)
+      - name: Verify CLI
+        run: |
+          uipcli --version
+
+      # 6. Restore dependencies
       - name: Restore
-        run: uipath restore .
+        run: |
+          uipcli restore .
 
-      # 6. Pack project
+      # 7. Pack project
       - name: Pack
         run: |
-          uipath pack . --output ./output --version 1.0.${{ github.run_number }}
+          uipcli pack . --output ./output --version 1.0.${{ github.run_number }}
 
-      # 7. Deploy to Orchestrator
+      # 8. Deploy to Orchestrator
       - name: Deploy
         run: |
-          uipath deploy ./output `
+          uipcli deploy ./output `
             --accountName ${{ secrets.UIPATH_ACCOUNT_NAME }} `
             --tenantName ${{ secrets.UIPATH_TENANT_NAME }} `
             --token ${{ secrets.UIPATH_PAT }} `
