@@ -30,6 +30,10 @@ jobs:
       - name: Verify CLI
         run: |
           uipcli --version
+          
+      - name: Debug secrets (length check)
+        run: |
+         echo "Account length: $env:UIPATH_ACCOUNT_NAME".Length
 
       # ✅ Pack
       - name: Pack
